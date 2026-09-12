@@ -8,18 +8,20 @@
 float wrap_angle_deg(float deg);
 
 inline float deg_normalize_180(float d) {
-  if (d > 180.0f) {
-    d -= 360.0f;
-  } else if (d <= -180.0f) {
-    d += 360.0f;
-  }
-  return d;
+    if (d > 180.0f) {
+        d -= 360.0f;
+    } else if (d <= -180.0f) {
+        d += 360.0f;
+    }
+    return d;
 }
 
 inline float clampf(float v, float lo, float hi) {
-  if (v < lo) return lo;
-  if (v > hi) return hi;
-  return v;
+    if (v < lo)
+        return lo;
+    if (v > hi)
+        return hi;
+    return v;
 }
 
-#endif  // DAY0_BASE_MATH_H
+#endif // DAY0_BASE_MATH_H

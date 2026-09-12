@@ -5,34 +5,34 @@
 
 // 调参集中在这一块。谁调什么参数都改这里，所以它总是被改。
 namespace ctrl_params {
-constexpr float kDefaultClampSpeed = 4.0f;
-constexpr float kJointRate = 0.02f;
-constexpr float kChassisRotateRate = 3.0f;
-constexpr float kMouseVisionRate = 0.2f;
-}  // namespace ctrl_params
+    constexpr float kDefaultClampSpeed = 4.0f;
+    constexpr float kJointRate = 0.02f;
+    constexpr float kChassisRotateRate = 3.0f;
+    constexpr float kMouseVisionRate = 0.2f;
+} // namespace ctrl_params
 
 namespace {
 
-MotorMonitor g_joint_monitor;
-Clamp g_clamp;
-Mode_e g_mode = Mode_e::FOLD;
+    MotorMonitor g_joint_monitor;
+    Clamp g_clamp;
+    Mode_e g_mode = Mode_e::FOLD;
 
-}  // namespace
+} // namespace
 
 void controlInit() {
-  g_joint_monitor.reset(0.0f);
-  g_clamp.beginCalibration();
-  g_clamp.endCalibration();
-  g_mode = Mode_e::FOLD;
+    g_joint_monitor.reset(0.0f);
+    g_clamp.beginCalibration();
+    g_clamp.endCalibration();
+    g_mode = Mode_e::FOLD;
 }
 
 void controlLoop() {
-  // 这里只是骨架：真实工程里是所有模块的调度
-  const ClampState state = g_clamp.update(0.0f, 0.0f);
-  (void)state;
-  (void)ctrl_params::kDefaultClampSpeed;
+    // 这里只是骨架：真实工程里是所有模块的调度
+    const ClampState state = g_clamp.update(0.0f, 0.0f);
+    (void)state;
+    (void)ctrl_params::kDefaultClampSpeed;
 }
 
 Mode_e currentMode() {
-  return g_mode;
+    return g_mode;
 }

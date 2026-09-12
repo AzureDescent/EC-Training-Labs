@@ -7,4 +7,4 @@ void controlInit();
 void controlLoop();
 Mode_e currentMode();
 
-#endif  // DAY0_APP_CONTROL_H
+#endif // DAY0_APP_CONTROL_H

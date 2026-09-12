@@ -5,10 +5,10 @@
 #include "base/math.h"
 
 float wrap_angle_deg(float deg) {
-  if (deg > 180.0f) {
-    deg -= 360.0f;
-  } else if (deg <= -180.0f) {
-    deg += 360.0f;
-  }
-  return deg;
+    if (deg > 180.0f) {
+        deg -= 360.0f;
+    } else if (deg <= -180.0f) {
+        deg += 360.0f;
+    }
+    return deg;
 }

@@ -6,35 +6,35 @@
 
 namespace {
 
-const char* name(ClampState s) {
-  switch (s) {
-    case ClampState::kIdle:
-      return "kIdle";
-    case ClampState::kMoving:
-      return "kMoving";
-    case ClampState::kBlocked:
-      return "kBlocked";
-    case ClampState::kHolding:
-      return "kHolding";
-  }
-  return "?";
-}
+    const char* name(ClampState s) {
+        switch (s) {
+        case ClampState::kIdle:
+            return "kIdle";
+        case ClampState::kMoving:
+            return "kMoving";
+        case ClampState::kBlocked:
+            return "kBlocked";
+        case ClampState::kHolding:
+            return "kHolding";
+        }
+        return "?";
+    }
 
-}  // namespace
+} // namespace
 
 int main() {
-  Clamp c;
+    Clamp c;
 
-  // 阻力超过阈值 -> 卡住
-  testutil::check_eq("blocked when force high", name(c.update(1500.0f, 0.0f)), "kBlocked");
-  // 阻力正常、角度没到位 -> 运动中
-  testutil::check_eq("moving when angle low", name(c.update(100.0f, 100.0f)), "kMoving");
-  // 阻力正常、角度到位 -> 夹持
-  testutil::check_eq("holding when angle high", name(c.update(100.0f, 950.0f)), "kHolding");
-  // 走一遍标定流程之后，阈值行为不变
-  c.beginCalibration();
-  c.endCalibration();
-  testutil::check_eq("blocked after calibration", name(c.update(1500.0f, 0.0f)), "kBlocked");
+    // 阻力超过阈值 -> 卡住
+    testutil::check_eq("blocked when force high", name(c.update(1500.0f, 0.0f)), "kBlocked");
+    // 阻力正常、角度没到位 -> 运动中
+    testutil::check_eq("moving when angle low", name(c.update(100.0f, 100.0f)), "kMoving");
+    // 阻力正常、角度到位 -> 夹持
+    testutil::check_eq("holding when angle high", name(c.update(100.0f, 950.0f)), "kHolding");
+    // 走一遍标定流程之后，阈值行为不变
+    c.beginCalibration();
+    c.endCalibration();
+    testutil::check_eq("blocked after calibration", name(c.update(1500.0f, 0.0f)), "kBlocked");
 
-  return testutil::report("test_clamp");
+    return testutil::report("test_clamp");
 }
