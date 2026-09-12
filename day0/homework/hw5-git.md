@@ -56,7 +56,7 @@ git clone git@github.com:<你的用户名>/EC-Training-Labs.git
 cd EC-Training-Labs/day0/project
 
 # 3. 把老师的仓库加成第二个远端，后面 Task 9 要用
-git remote add upstream git@github.com:<老师的账号>/EC-Training-Labs.git
+git remote add upstream git@github.com:SJTU-RoboMaster-Team/EC-Training-Labs.git
 git remote -v          # 应该看到 origin（你的）和 upstream（老师的）
 ```
 
@@ -298,7 +298,7 @@ deg_normalize_180 只处理了 d > 180 的情况，导致正向跨零时
 git push -u origin fix/encoder-wrap
 ```
 
-**怎么验证：** 打开 `https://github.com/<你的用户名>/day0-git-lab`，
+**怎么验证：** 打开 `https://github.com/<你的用户名>/EC-Training-Labs`，
 在分支下拉框里能看到 `fix/encoder-wrap`。
 
 ---
@@ -436,7 +436,7 @@ python grade.py hw5 https://github.com/<你的用户名>/EC-Training-Labs
 
 ```text
 ┌─ HW5 · Git 工作流 ───────────────────────────────────────────┐
-│ 仓库  github.com/<你的用户名>/day0-git-lab                    │
+│ 仓库  github.com/<你的用户名>/EC-Training-Labs                │
 │ 分支  fix/encoder-wrap → main                                 │
 ├──────────────────────────────────────────────────────────────┤
 │ ✅ message 格式                  4/4 条合规                   │
