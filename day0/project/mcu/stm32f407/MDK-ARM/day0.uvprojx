@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!-- Keil MDK 工程文件。这个文件列出了所有源文件、头文件路径和调试配置，
+     任何人在工程里新增一个文件，它就会变一次。 -->
+<Project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SchemaVersion>2.1</SchemaVersion>
+  <Targets>
+    <Target>
+      <TargetName>day0</TargetName>
+      <ToolsetName>ARM-ADS</ToolsetName>
+      <TargetOption>
+        <TargetCommonOption>
+          <Device>STM32F407VGTx</Device>
+          <Vendor>STMicroelectronics</Vendor>
+          <OutputDirectory>.\Objects\</OutputDirectory>
+          <ListingPath>.\Listings\</ListingPath>
+        </TargetCommonOption>
+      </TargetOption>
+      <Groups>
+        <Group>
+          <GroupName>app</GroupName>
+          <Files>
+            <File><FileName>control.c</FileName><FileType>1</FileType><FilePath>..\..\..\app\control.c</FilePath></File>
+            <File><FileName>motor_monitor.c</FileName><FileType>1</FileType><FilePath>..\..\..\app\motor_monitor.c</FilePath></File>
+          </Files>
+        </Group>
+      </Groups>
+    </Target>
+  </Targets>
+</Project>
