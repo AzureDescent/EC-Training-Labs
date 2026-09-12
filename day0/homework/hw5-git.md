@@ -305,7 +305,9 @@ git push -u origin fix/encoder-wrap
 
 ### Task 9 · 同步上游（制造一次真实冲突）
 
-老师在模板仓库上推了一个新功能。你要把它同步进来。
+**场景**：老师（相当于"另一个队友"）在上游仓库开了一个功能分支 `drop-mode`，
+给机械臂加了一个"存取矿"模式。这个功能和你的标定功能**改到了同一个枚举的末尾**，
+你要把它合进来。
 
 **先做一件事：在你的分支上，给 `app/arm.h` 的模式枚举末尾加一个自己的值。**
 
@@ -331,11 +333,11 @@ feat(arm): add CALIBRATE mode for joint calibration
 
 ```bash
 git fetch upstream
-git log --oneline --graph upstream/main -5      # 看看老师加了什么
-git merge upstream/main
+git log --oneline --graph upstream/drop-mode -5   # 看看老师加了什么
+git merge upstream/drop-mode
 ```
 
-**你应该会看到冲突**，在 `app/arm.h`，长得像这样：
+**你应该会看到冲突**（CONFLICT），在 `app/arm.h`，长得像这样：
 
 ```cpp
   STORAGE_BACK,
@@ -495,7 +497,7 @@ python grade.py hw5 https://github.com/<你的用户名>/EC-Training-Labs
 | 编译报 `deg_normalize_180` 找不到 | 没 `#include "base/math.h"` | 补上 include |
 | 合并后编译不过 | 冲突标记没删干净 | `git diff` 找出来 |
 | `git switch -c` 说分支已存在 | 之前建过没删 | `git switch fix/encoder-wrap` 切过去 |
-| `git merge upstream/main` 说 no such ref | 没 `git fetch upstream` | 先 fetch |
+| `git merge upstream/drop-mode` 说 no such ref | 没 `git fetch upstream` | 先 fetch |
 | `cmake` 报找不到编译器 | 工具链没装好 | 回 Day 0 课件的环境章节 |
 | 跑了 `git add .`，把构建产物也加进去了 | —— | `git restore --staged build/`，然后确认 `.gitignore` |
 
