@@ -36,7 +36,7 @@ def run(cmd: list[str]) -> int:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="构建并测试 day0-git-lab")
+    parser = argparse.ArgumentParser(description="构建并测试 day0/project")
     parser.add_argument("--no-test", action="store_true", help="只构建，不跑测试")
     parser.add_argument("--clean", action="store_true", help="先删掉 build/ 再构建")
     args = parser.parse_args()
