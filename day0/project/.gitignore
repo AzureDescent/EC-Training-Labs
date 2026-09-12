@@ -1,0 +1,16 @@
+# 构建产物（按文件类型）
+*.o
+*.elf
+*.hex
+*.map
+*.bin
+*.axf
+
+# 编辑器
+.idea/
+.vscode/.cortex-debug*
+*.autosave
+
+# MATLAB
+slprj/
+*.slxc

@@ -1,0 +1,10 @@
+# 统一换行符：仓库里一律存 LF，检出时按平台自动转换。
+# 没有这一条，Windows 上很容易出现"整份文件都变了"的假 diff
+# —— 那不是你改的，是换行符。
+* text=auto
+
+# 二进制文件不做换行符转换
+*.png binary
+*.jpg binary
+*.pdf binary
+*.uvguix.* binary
