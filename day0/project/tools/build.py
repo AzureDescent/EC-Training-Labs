@@ -45,11 +45,14 @@ def main() -> int:
     if shutil.which("cmake") is None:
         print("!! 找不到 cmake。")
         print("   请先完成 Day 0 的环境配置，确认 `cmake --version` 有输出。")
+        print("   用 CLion 的话：CLion 自带 cmake，在 Settings → Build → CMake 里能看到路径。")
         return 1
-    if shutil.which("g++") is None and shutil.which("clang++") is None:
-        print("!! 找不到 C++ 编译器（g++ 或 clang++）。")
-        print("   请先完成 Day 0 的环境配置。")
-        return 1
+    # 编译器只做提示，不做硬性拦截 —— Windows 上用 CLion 自带的 MinGW 或 MSVC 时，
+    # g++/clang++ 可能不在 PATH 上，但 cmake 自己能找到。真找不到时 cmake 会报得比我们清楚。
+    if shutil.which("g++") is None and shutil.which("clang++") is None and shutil.which("cl") is None:
+        print("提示：PATH 上没有找到 g++ / clang++ / cl，交给 cmake 自己找编译器。")
+        print("      如果 cmake 报找不到编译器，见 Day 0 课件的环境配置一节。")
+        print()
 
     if args.clean and BUILD_DIR.exists():
         print(f"删除 {BUILD_DIR}")

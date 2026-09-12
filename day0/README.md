@@ -27,11 +27,11 @@
 | 作业 | 标题 | 配什么 | 状态 |
 | --- | --- | --- | --- |
 | HW0 | 环境自检 | 线下当堂 | 任务书待写 |
-| HW1 | 把项目跑起来 | CLion / Keil 录播 | 任务书待写 |
-| HW2 | 修编码器回绕 | C++ 自学 + 录播 | 任务书待写 |
-| HW3 | 编译与链接 | Keil 录播 | 任务书待写 |
-| HW4 | 格式化 | clang-format 录播 | 任务书待写 |
-| **HW5** | **Git 工作流** | **线下 Git 课件** | **[任务书已就绪](homework/hw5-git.md)** |
+| **HW1** | **把项目跑起来** | CLion / Keil 录播 | **[已就绪](homework/hw1-build.md)** |
+| **HW2** | **修编码器回绕** | C++ 自学 + 录播 | **[已就绪](homework/hw2-encoder.md)** |
+| **HW3** | **编译与链接** | Keil 录播 | **[已就绪](homework/hw3-link.md)** |
+| **HW4** | **格式化** | clang-format 录播 | **[已就绪](homework/hw4-format.md)** |
+| **HW5** | **Git 工作流** | **线下 Git 课件** | **[已就绪](homework/hw5-git.md)** |
 | HW6 | 发一个 PR | — | 不计分 |
 
 **建议节奏**（2–3 周）：
@@ -54,6 +54,10 @@ day0/
 ├── README.md            你正在看的这份
 ├── project/             作业用的 C++ 工程（HW1–HW5 共用）
 └── homework/            任务书
+    ├── hw1-build.md     把项目跑起来
+    ├── hw2-encoder.md   修编码器回绕
+    ├── hw3-link.md      编译与链接
+    ├── hw4-format.md    格式化
     └── hw5-git.md       Git 工作流
 ```
 

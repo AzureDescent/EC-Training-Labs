@@ -484,6 +484,7 @@ python grade.py hw5 https://github.com/<你的用户名>/EC-Training-Labs
 - [ ] 存在命名为 `fix/<what>` 或 `tune/<what>` 等合规格式的任务分支
 - [ ] 分支上有实质提交（不是空分支）
 - [ ] 所有 commit message 符合 `type(scope): subject` 或 `type: subject`
+      （type ∈ `feat` `fix` `refactor` `docs` `test` `chore` `tune` `style`）
 - [ ] 没有任何 commit message 属于低信息量黑名单（`update` / `modify` / `tmp` / `tuning` / `改` …）
 - [ ] 历史中没有构建产物（`build/` / `*.o` / Keil 生成文件）
 - [ ] 工作区与历史中没有冲突标记残留（`<<<<<<<` / `>>>>>>>`）

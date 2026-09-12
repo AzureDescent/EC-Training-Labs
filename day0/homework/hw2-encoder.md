@@ -1,0 +1,282 @@
+# HW2 · 修编码器回绕
+
+HW1 里你看到 `test_encoder` 挂了 1 个用例。这份作业就是把它修好。
+
+**这份作业的重点不是"改几行代码"，是学会"从测试失败倒推到原因"。**
+
+---
+
+## 学习目标
+
+1. 从一条失败的断言，倒推出代码哪里不对
+2. 理解**编码器的角度是回绕的**，所以增量不能直接相减
+3. 修完之后**跑全量测试**，确认没有把别的东西弄坏
+4. 用一条合规的 commit message 记录这次修复
+
+---
+
+## 开始之前
+
+- [ ] 完成了 HW1：`python tools/build.py` 能构建成功
+- [ ] `test_encoder` 现在是 **3/4**，挂的是 `forward across zero`
+- [ ] `git status` 显示工作区干净
+
+---
+
+## 获取代码
+
+```bash
+cd EC-Training-Labs/day0/project
+git switch main
+git pull
+```
+
+> ⚠️ **工作目录：后面所有命令都在 `day0/project/` 里执行。**
+
+---
+
+## 任务
+
+### Task 1 · 再看一遍失败的那一行
+
+```bash
+python tools/build.py
+```
+
+```text
+  [ ok ] plain forward                got    10.00
+  [ ok ] plain backward               got   -10.00
+  [FAIL] forward across zero          got  -348.00  want    12.00
+  [ ok ] backward across zero         got   -12.00
+test_encoder: 3/4 passed
+```
+
+**注意两件事：**
+
+1. 期望值是 `+12`，实际得到 `-348`
+2. **另外三个用例都过了**——包括另一个"跨零"的用例
+
+**怎么验证：** 你能说出"挂了几个、是哪一类用例挂了"。
+
+---
+
+### Task 2 · 想清楚为什么只有一个方向坏
+
+先把测试里的数据**手算一遍**。这四个用例喂给代码的是一串角度：
+
+```text
+用例 1  plain forward         10 → 15 → 20             期望累计 +10
+用例 2  plain backward        20 → 15 → 10             期望累计 -10
+用例 3  forward across zero   355 → 359 → 3 → 7        期望累计 +12   ← 挂
+用例 4  backward across zero  5 → 1 → 357 → 353        期望累计 -12
+```
+
+**动手算这两步**（用纸，或者在心里）：
+
+```text
+用例 4 里：1° → 357°      357 - 1   = ?
+用例 3 里：359° → 3°       3 - 359  = ?
+```
+
+两个都是 ±356 左右。但**实际只走了 4 度**（一个往前、一个往后）。
+
+**怎么验证：** 你能说出这两个数分别是多少。
+
+---
+
+### Task 3 · 找到处理这件事的那个函数
+
+工程里有一个函数专门负责"把角度差折算成实际走了多少度"。
+
+**自己找。** 提示：它在 `base/` 下面，名字里有 `deg` 和 `180`。
+
+<details>
+<summary>实在找不到，点开看文件名</summary>
+
+`base/math.h` —— 找 `deg_normalize_180`。
+
+</details>
+
+打开它，看懂它在做什么。
+
+**怎么验证：** 你能指着这个函数说"它把差值折到 (-180, 180] 这个范围里"。
+
+---
+
+### Task 4 · 想清楚为什么 `+356` 和 `-356` 命运不同
+
+这是整份作业最关键的一步。
+
+现在的实现是：
+
+```cpp
+inline float deg_normalize_180(float d) {
+  if (d > 180.0f) {
+    d -= 360.0f;
+  }
+  return d;
+}
+```
+
+把 Task 2 算出来的两个数代进去：
+
+```text
+d = +356   →  356 > 180 成立  →  356 - 360 = -4    ✓ 正确（往回走了 4 度）
+d = -356   →  -356 > 180 ？   →  不成立，原样返回 -356   ✗ 错了
+```
+
+**这就是为什么只有用例 3 挂：两个方向会走进不同的分支，而现在只有一个分支存在。**
+
+**怎么验证：** 你能解释"为什么补一个方向不够"。
+
+---
+
+### Task 5 · 改代码
+
+在 `base/math.h` 里补上缺的那一支。**改动应该只有 2 行。**
+
+<details>
+<summary>改完想对一下？点开看参考改法</summary>
+
+```cpp
+inline float deg_normalize_180(float d) {
+  if (d > 180.0f) {
+    d -= 360.0f;
+  } else if (d < -180.0f) {
+    d += 360.0f;
+  }
+  return d;
+}
+```
+
+关键是把**两个方向都折进 (-180, 180]**。
+
+</details>
+
+---
+
+### Task 6 · 跑全量测试（这一步不能省）
+
+```bash
+python tools/build.py
+```
+
+**期望：**
+
+```text
+test_encoder: 4/4 passed
+test_clamp: 4/4 passed
+100% tests passed, 0 tests failed out of 2
+```
+
+**怎么验证：**
+
+- [ ] `test_encoder` **4/4**
+- [ ] `test_clamp` **仍然 4/4** —— 这一条同样重要
+
+> ⚠️ **`test_clamp` 是回归保护。**
+> 它验证的是夹爪的逻辑，和编码器没关系。如果它挂了，说明你改坏了别的功能。
+> **"我修好了我的 bug，但弄坏了别人的功能"不是修好了。**
+
+---
+
+### Task 7 · 提交
+
+```bash
+git status
+git diff                    # ★ 先看一遍自己到底改了什么
+git add base/math.h
+git diff --staged           # ★ 再看一遍要提交的内容
+git commit
+```
+
+commit message 要**说清症状和原因**。参考：
+
+```text
+fix(motor): normalize encoder delta in both directions
+
+deg_normalize_180 只处理了 d > 180 的情况。编码器正向跨零时
+（359° → 3°，差值为 -356）会走进未处理的分支，累计角度一次跳 -350 度。
+补上 d < -180 的分支。
+```
+
+**怎么验证：**
+
+```bash
+git log --oneline -1
+git status                  # working tree clean
+```
+
+---
+
+## 自查
+
+```bash
+# 在 lab/ 目录下
+python grade.py hw2 https://github.com/<你的用户名>/EC-Training-Labs
+```
+
+**期望看到：**
+
+```text
+┌────────────────────────────────────────────────────────────┐
+│ HW2 · 修编码器回绕                                         │
+├────────────────────────────────────────────────────────────┤
+│ ✅ 测试全部通过           clamp 4/4 · encoder 4/4          │
+│ ✅ 测试文件未被修改       day0/project/tests 与最初一致    │
+│ ✅ message 格式           14/14 条合规                     │
+├────────────────────────────────────────────────────────────┤
+│ 结论   PASS                                                │
+└────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 提交
+
+把自查输出的截图发到飞书群。
+
+---
+
+## 评分
+
+**只有 PASS / FAIL。**
+
+- [ ] `test_encoder` 与 `test_clamp` **全部通过**
+- [ ] `tests/` 下的测试文件**没有被修改**
+- [ ] 所有 commit message 符合 `type(scope): subject`
+
+> **为什么"测试文件未被修改"是必修项？**
+> 把测试里的 `12.0f` 改成 `-348.0f`，测试确实会变绿——但 bug 还在。
+> **改测试让它通过 = 任务没完成。** grader 会比对测试文件的哈希。
+
+---
+
+## 常见错误
+
+| 症状 | 原因 | 怎么办 |
+| --- | --- | --- |
+| 改完 `test_encoder` 还是 3/4，挂的还是同一个 | 只补了一个方向，或者改错了文件 | 回 Task 4，把两个数都代进去算一遍 |
+| `test_encoder` 4/4 但 `test_clamp` 挂了 | 改动影响了夹爪逻辑 | 检查你是不是改了 `app/clamp.cpp` 或 `app/arm.h` |
+| 编译报 `deg_normalize_180` 找不到 | 没 `#include "base/math.h"` | 补上 include |
+| `git diff` 里整个文件都变了 | 换行符问题（CRLF/LF） | 工程里有 `.gitattributes`，`git add` 时会自动归一化；`git diff --ignore-all-space` 看真实改动 |
+| 提交时弹编辑器不会用 | 没加 `-m` | `git commit -m "消息"`，或按提示先配置编辑器 |
+
+---
+
+## 参考
+
+| 内容 | 在哪 |
+| --- | --- |
+| 编码器为什么会回绕 | Day 0 课件 · CAN 章节（13 位编码器，0~8191） |
+| commit message 怎么写 | Day 0 课件「书写约定」一节 |
+| `git diff` / `git add` / `git commit` | Day 0 课件 Loop 1–2 |
+
+---
+
+## 做完之后
+
+你已经修好了一个真实的 bug——**这段逻辑是从真实战队代码里提取的**
+（`MasterArm/base/motor/motor.cpp` 里的角度累加）。
+
+下一份作业（HW3）会离开代码逻辑，去看**代码是怎么变成可执行文件的**。
