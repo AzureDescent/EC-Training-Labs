@@ -5,9 +5,13 @@
 //
 // 编码器原始角在 [0, 360) 之间回绕，直接用 current - last 求增量的话，
 // 跨零时会算出 ±350 这种数，累计角度就飞了。所以增量必须先过这里。
+float wrap_angle_deg(float deg);
+
 inline float deg_normalize_180(float d) {
   if (d > 180.0f) {
     d -= 360.0f;
+  } else if (d <= -180.0f) {
+    d += 360.0f;
   }
   return d;
 }

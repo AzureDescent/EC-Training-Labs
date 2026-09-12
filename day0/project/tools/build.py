@@ -61,7 +61,7 @@ def main() -> int:
     print("=" * 60)
     print("配置 (cmake configure)")
     print("=" * 60)
-    rc = run(["cmake", "-S", ".", "-B", "build", "-DCMAKE_BUILD_TYPE=Debug"])
+    rc = run(["cmake", "-S", ".", "-B", "build", "-DCMAKE_BUILD_TYPE=Debug", "-G", "Ninja"])
     if rc != 0:
         return rc
 
